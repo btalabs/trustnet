@@ -79,8 +79,9 @@ contract trustNet {
 						 _confidence,
 						 block.timestamp);
 
-		claimRegister[_target].
-						push(claim(_id,
+		claimRegister[_target].push(
+					claim(
+						_id,
 						 msg.sender,
 						 _target,
 						 _ipfsHash,
