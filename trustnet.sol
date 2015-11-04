@@ -3,14 +3,15 @@ contract trustNet {
 	//a universal reputation system
 	//author @hugooconnor
 	//license GNU GPL
+	//(this code is currently a sketch -- ie. not working :)
 
 	struct claim {
 		//id of the claim
-		string id;
+		bytes32 id;
 		//who is making the claim
 		address owner;
 		//who or what the claim is about
-		string target;
+		bytes32 target;
 		//ipfs hash to related documents
 		string ipfsHash;
 		//categorycode - defined by trustnet owner and admins
@@ -33,8 +34,8 @@ contract trustNet {
 		uint dateModified;
 	}
 
-	//main data structure --  tying unique string to an array of claims
-	mapping (string => claim[]) claimRegister;
+	//main data structure --  tying bytes32 identifier to an array of claims
+	mapping (bytes32 => claim[]) claimRegister;
 	//category code data structure - tying numbers to definitions
 	mapping (uint => categoryCode) codeRegister;
 	//admin register -- who has permission to edit the category codes;
@@ -59,16 +60,39 @@ contract trustNet {
 
 	// --- CLAIMS  ---
 
-	function makeClaim(string _target, string _ipfsHash, uint _categoryCode, bytes32 _countryCode, uint _startDate, uint _endDate, uint8 _confidence, uint _dateCreated) returns (string id) {
-		//cannot convert bytes32 to string
-		string _id = sha3(msg.sender, _target, _ipfsHash, _categoryCode,  _countryCode, _startDate, _endDate, _confidence, block.timestamp);
-		claimRegister[_target].push(claim(id, msg.sender, _target, _ipfsHash, _categoryCode,  _countryCode, _startDate, _endDate, _confidence, block.timestamp));
+	function makeClaim(bytes32 _target,
+	 					string _ipfsHash,
+	 					 uint _categoryCode,
+	 					  bytes32 _countryCode,
+	 					   uint _startDate,
+	 					    uint _endDate,
+	 					     uint8 _confidence,
+	 					      uint _dateCreated) returns (bytes32 id) {
+
+		bytes32 _id = sha3(msg.sender,
+							 _target,
+							 _ipfsHash,
+							 _categoryCode,
+							 _countryCode,
+							 _startDate,
+							 _endDate,
+							 _confidence,
+							 block.timestamp);
+
+		claimRegister[_target].push(claim(_id,
+										 msg.sender,
+										 _target,
+										 _ipfsHash,
+										 _categoryCode,
+										 _countryCode,
+										 _startDate,
+										 _endDate,
+										 _confidence,
+										 block.timestamp));
 		makeClaimLog();
 		return _id;
 	}
 
-	//this won't compile until solidity is able to return dynamic arrays
-	//https://github.com/ethereum/solidity/issues/166
 	function getClaims(string target) returns (claim[] claims) { 
 		return claimRegister[target];
 	}
