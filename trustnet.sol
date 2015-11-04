@@ -61,34 +61,35 @@ contract trustNet {
 	// --- CLAIMS  ---
 
 	function makeClaim(bytes32 _target,
-	 					string _ipfsHash,
-	 					 uint _categoryCode,
-	 					  bytes32 _countryCode,
-	 					   uint _startDate,
-	 					    uint _endDate,
-	 					     uint8 _confidence,
-	 					      uint _dateCreated) returns (bytes32 id) {
+ 					string _ipfsHash,
+ 					uint _categoryCode,
+ 					bytes32 _countryCode,
+ 					uint _startDate,
+ 					uint _endDate,
+ 					uint8 _confidence,
+ 					uint _dateCreated) returns (bytes32 id) {
 
 		bytes32 _id = sha3(msg.sender,
-							 _target,
-							 _ipfsHash,
-							 _categoryCode,
-							 _countryCode,
-							 _startDate,
-							 _endDate,
-							 _confidence,
-							 block.timestamp);
+						 _target,
+						 _ipfsHash,
+						 _categoryCode,
+						 _countryCode,
+						 _startDate,
+						 _endDate,
+						 _confidence,
+						 block.timestamp);
 
-		claimRegister[_target].push(claim(_id,
-										 msg.sender,
-										 _target,
-										 _ipfsHash,
-										 _categoryCode,
-										 _countryCode,
-										 _startDate,
-										 _endDate,
-										 _confidence,
-										 block.timestamp));
+		claimRegister[_target].
+						push(claim(_id,
+						 msg.sender,
+						 _target,
+						 _ipfsHash,
+						 _categoryCode,
+						 _countryCode,
+						 _startDate,
+						 _endDate,
+						 _confidence,
+						 block.timestamp));
 		makeClaimLog();
 		return _id;
 	}
